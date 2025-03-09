@@ -1,4 +1,4 @@
-## HW5 - Finding a House in ByteLand 🏡
+# HW5 - Finding a House in ByteLand 🏡
 
 ## Problem Statement
 ByteLand has been redesigned into a grid of R × C cells, where ADA, a little girl, wants to reach her home at the bottom-right cell as fast as possible. However, there are various types of terrain that affect movement:
@@ -74,20 +74,20 @@ For each test case, print an R × C matrix, where result[i][j] represents the mi
 ```
 
 
-Constraints
+## Constraints
 1. 1 ≤ R, C ≤ 1000
-2. 2.0 ≤ H ≤ 10
+2. 0 ≤ H ≤ 10
 3. The total number of cells across all instances is at most 4 × 10⁶
 4. Time Limit: 3 seconds (C/C++), 5 seconds (Python)
 
 ## Approach & Solution
 This problem is solved using Dijkstra’s Algorithm with a priority queue (heapq) to handle weighted grid traversal efficiently.
 
-✅ Initialize a 3D distance matrix result[r][c][spiky_count] to store the minimum time for each cell, keeping track of the number of spiky cells stepped on.
-✅ Use a priority queue (heapq) to process the shortest paths first (Dijkstra's strategy).
-✅ Handle teleportation cells efficiently by precomputing the leftmost/rightmost/topmost/bottommost teleport destinations.
-✅ Ensure spiky cell constraints by maintaining a count of spiky steps used.
-✅ Process muddy cells with their specific weight (2-5).
+- ✅ Initialize a 3D distance matrix result[r][c][spiky_count] to store the minimum time for each cell, keeping track of the number of spiky cells stepped on.
+- ✅ Use a priority queue (heapq) to process the shortest paths first (Dijkstra's strategy).
+- ✅ Handle teleportation cells efficiently by precomputing the leftmost/rightmost/topmost/bottommost teleport destinations.
+- ✅ Ensure spiky cell constraints by maintaining a count of spiky steps used.
+- ✅ Process muddy cells with their specific weight (2-5).
 
 
 
