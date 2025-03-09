@@ -1,93 +1,75 @@
-# HW5 - Finding a House in ByteLand 🏡
+# HW4 - Radio Towers Again 📡
 
 ## Problem Statement
-ByteLand has been redesigned into a grid of R × C cells, where ADA, a little girl, wants to reach her home at the bottom-right cell as fast as possible. However, there are various types of terrain that affect movement:
-- Empty cells (1) allow movement in 1 second.
-- Muddy cells (2-5) take 2 to 5 seconds to traverse.
-- Rocky cells (0) cannot be traversed.
-- Teleportation cells (-1) allow instant movement to specific cells.
-- Spiky cells (-2) can only be crossed a limited number of times (H).
-
-The goal is to compute the minimum time required for ADA to reach each cell from the starting position (1,1), or -1 if the cell is unreachable.
+ByteLand has n cities positioned along the x-axis, with each city at coordinate Ai. A telecommunications company is tasked with rebuilding k radio towers after a tsunami destroyed all existing infrastructure. Each tower has a coverage radius d, but due to interference from buildings and terrain, a tower built at city i will only function at pi% of its expected range. This means that a tower placed at city i can provide service to all cities j such that:
+| Ai - Aj | < d * (pi/100)
+The company wants to minimize d while ensuring that all cities receive coverage using at most k towers.
 
 ## Input Format
 The input consists of multiple test instances:
 
-- The first line contains an integer T, the number of test cases.
-- For each test case, The first line contains three integers:
-- - R → Number of rows.
-- - C → Number of columns.
-- - H → Maximum number of spiky cells ADA can walk over.
-- The next R lines each contain C integers, representing the grid:
-- - 1 → Empty cell (1-second movement).
-- - 0 → Rocky cell (impassable).
-- - 2-5 → Muddy cell (movement takes grid[i][j] seconds).
-- - 1 → Teleportation cell.
-- - 2 → Spiky cell (can only be crossed H times).
+- The first line contains an integer C, the number of test cases.
+- Each test case consists of:
+- - Two integers: n → Number of cities and k → Maximum number of towers available
+- - A line with n integers: p1, p2, ....pn -> coverage percentage of each city(multiples of 20)
+- - A line with n integers: A1, A2,...An -> City positions(strictly increasing order)
  
 ## Output Format
-For each test case, print an R × C matrix, where result[i][j] represents the minimum time to reach cell (i, j) from (1,1).
-- If a cell cannot be reached, print -1.
+For each test case, print a single integer, which is the minimum required coverage radius d multiplied by 60 to ensure that all cities are covered. If it's impossible to cover all cities with k towers, output -1.
 
 ## Example Input/Output
 ### Input
 ```bash
-6
-2 5 0
-1 0 1 1 1
-1 1 1 0 1
-2 5 0
-1 5 1 1 1
-1 1 1 5 1
-2 5 1
-1 -2 5 1 1
-3 -2 1 -2 1
-2 5 2
-1 -2 5 1 1
-3 -2 1 -2 1
-2 5 0
-1 2 -1 0 -1
-1 1 1 5 1
-3 5 0
-1 2 -1 0 -1
-5 5 5 0 0
-5 5 5 5 1
+5
+5 1
+100 100 100 100 100
+1 3 5 7 9
+5 2
+100 100 100 100 100
+1 3 5 7 9
+5 3
+100 100 100 100 100
+1 3 5 7 9
+5 4
+100 100 100 100 100
+1 3 5 7 9
+5 5
+2
+100 100 100 100 100
+1 3 5 7 9
 ```
 
 
 ### Output
 ```bash
-0 -1 4 5 6
-1 2 3 -1 7
-0 5 4 5 6
-1 2 3 8 7
-3
-0 1 6 7 8
-3 4 5 -1 9
-0 1 6 7 8
-3 2 3 6 7
-0 2 3 -1 4
-1 2 3 8 5
-0 2 3 -1 4
-5 7 8 -1 -1
-10 12 13 18 19
+240
+120
+120
+120
+0
 ```
 
-
 ## Constraints
-1. 1 ≤ R, C ≤ 1000
-2. 0 ≤ H ≤ 10
-3. The total number of cells across all instances is at most 4 × 10⁶
-4. Time Limit: 3 seconds (C/C++), 5 seconds (Python)
+1. 1 ≤ k ≤ n ≤ 10⁵
+2. pi ∈ {20, 40, 60, 80, 100}
+3. 0 ≤ Ai ≤ 10^9
+4. Total number of cities across all test cases ≤ 10⁵
+5. Time Limits: C/C++: 4s, Python: 10s
 
 ## Approach & Solution
-This problem is solved using Dijkstra’s Algorithm with a priority queue (heapq) to handle weighted grid traversal efficiently.
+This problem can be efficiently solved using binary search and greedy placement of radio towers.
 
-- ✅ Initialize a 3D distance matrix result[r][c][spiky_count] to store the minimum time for each cell, keeping track of the number of spiky cells stepped on.
-- ✅ Use a priority queue (heapq) to process the shortest paths first (Dijkstra's strategy).
-- ✅ Handle teleportation cells efficiently by precomputing the leftmost/rightmost/topmost/bottommost teleport destinations.
-- ✅ Ensure spiky cell constraints by maintaining a count of spiky steps used.
-- ✅ Process muddy cells with their specific weight (2-5).
+- ✅ Binary Search on d: We perform binary search on the minimum possible d. The search space for d is between 0 and 10⁹ (scaled by 60).
+
+- ✅ Checking Coverage Feasibility
+- Given a candidate d, we attempt to greedily place towers:
+- - Start at the first city.
+- - Place a tower that extends coverage as far as possible.
+- - Move to the next uncovered city and repeat.
+- - If more than k towers are needed, increase d.
 
 
-
+- ✅ Optimizations
+- Use integer-only calculations to prevent precision errors.
+- Sort and preprocess city positions for efficient traversal.
+- Use a priority queue or two-pointer technique for fast tower placement.
